@@ -7,6 +7,10 @@ snake[0] = {
     y: 8 * box
 }
 let direction = 'right';
+let food = {
+    x: Math.floor(Math.random() * 15 + 1) * box,
+    y: Math.floor(Math.random() * 15 + 1) * box
+}
 
 function createBG() {
     context.fillStyle = 'lightgreen';
@@ -19,8 +23,6 @@ function createSnake() {
         context.fillRect(snake[i].x, snake[i].y, box, box);
     }
 }
-
-document.addEventListener('keydown', update);
 
 function update(event) {
     if (event.keyCode == 37 && direction != 'right') direction = 'left';
@@ -36,10 +38,17 @@ function checkBoardCollide() {
     if (snake[0].y < 0 && direction == 'down') snake[0].y = 16 * box;
 }
 
+function drawFood() {
+    context.fillStyle = 'red';
+    context.fillRect(food.x, food.y, box, box);
+}
+
 function startGame() {
+    document.addEventListener('keydown', update);
     checkBoardCollide();
     createBG();
     createSnake();
+    drawFood();
 
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
