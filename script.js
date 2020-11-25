@@ -38,13 +38,23 @@ function checkBoardCollide() {
     if (snake[0].y < 0 && direction == 'down') snake[0].y = 16 * box;
 }
 
+function checkSnakeBodyCollide() {
+    for (let i = 1; i < snake.length; i++) {
+        if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
+            clearInterval(game);
+            alert('Game Over :(')
+        }
+    }
+}
+
 function drawFood() {
     context.fillStyle = 'red';
     context.fillRect(food.x, food.y, box, box);
 }
 
 function startGame() {
-    document.addEventListener('keydown', update);
+
+    checkSnakeBodyCollide();
     checkBoardCollide();
     createBG();
     createSnake();
@@ -58,7 +68,12 @@ function startGame() {
     if (direction == 'up') snakeY += box;
     if (direction == 'down') snakeY -= box;
 
-    snake.pop();
+    if (snakeX != food.x || snakeY != food.y) {
+        snake.pop();
+    } else {
+        food.x = Math.floor(Math.random() * 15 + 1) * box,
+        food.y = Math.floor(Math.random() * 15 + 1) * box
+    }
 
     let newHaed = {
         x: snakeX,
@@ -68,4 +83,5 @@ function startGame() {
     snake.unshift(newHaed);
 }
 
+document.addEventListener('keydown', update);
 let game = setInterval(startGame, 100);
